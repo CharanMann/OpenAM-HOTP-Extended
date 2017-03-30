@@ -13,11 +13,12 @@ OpenAM Configuration:
 1. Build the custom auth module by using maven. 
 2. Deploy the custom auth module. Refer instructions: *[Building and Installing Custom Authentication Modules](https://backstage.forgerock.com/docs/openam/13.5/dev-guide#build-config-sample-auth-module)*
 3. Configure the custom auth module. Refer instructions: *[Configuring and Testing Custom Authentication Modules](https://backstage.forgerock.com/docs/openam/13.5/dev-guide#configuring-testing-sample-auth-module)*
-4. Create a chain with (LDAP:Required, HOTPExt:Required)
+4. Configure HOTPExt module with required SMTP server. Enable both SMS and EMail.
+5. Create a chain(otpChain) with (LDAP:Required, HOTPExt:Required). Set this chain as default for "Organization Authentication"
   
 Testing:
 ======== 
-* Authentication test with HOTP module enabled (Both SMS and EMail):
+* Authentication testing for otpChain:
 ```
 curl -X POST -H "Content-Type: application/json" -H "X-OpenAM-Username: testUser1" -H "X-OpenAM-Password: password" "http://openam.sample.com/openam/json/employees/authenticate"
 
@@ -25,7 +26,7 @@ curl -X POST -H "Content-Type: application/json" -H "X-OpenAM-Username: testUser
   "authId": "eyAid..",
   "template": "",
   "stage": "HOTPExt2",
-  **"header": "Please enter your One Time Password sent at Email testUser1@gmail.com and Phone: 2223334444",**
+  "header": "Please enter your One Time Password sent at Email testUser1@gmail.com and Phone: 2223334444",
   "callbacks": [
     {
       "type": "PasswordCallback",
