@@ -1,4 +1,4 @@
-# OpenAM-HOTP-Extended:
+# OpenAM-HOTP-Extended
 
 * OpenAM HOTP Extensions - OpenAM Custom Auth Module <br />
 * Displays Email and/or Phone number where HOTP has been sent 
@@ -25,7 +25,7 @@ curl -X POST -H "Content-Type: application/json" -H "X-OpenAM-Username: testUser
   "authId": "eyAid..",
   "template": "",
   "stage": "HOTPExt2",
-  "header": "Please enter your One Time Password sent at Email testUser1@gmail.com and Phone: 2223334444",
+  **"header": "Please enter your One Time Password sent at Email testUser1@gmail.com and Phone: 2223334444",**
   "callbacks": [
     {
       "type": "PasswordCallback",
