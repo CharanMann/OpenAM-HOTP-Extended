@@ -49,6 +49,11 @@
     <dependencies>
         <dependency>
             <groupId>org.forgerock.openam</groupId>
+            <artifactId>openam-auth-hotp</artifactId>
+            <version>${openam.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.forgerock.openam</groupId>
             <artifactId>openam-core</artifactId>
             <version>${openam.version}</version>
         </dependency>

@@ -28,7 +28,7 @@
  * OpenAM-HOTP-Extended: Created by Charan Mann on 03/29/17 , 2:45 PM.
  */
 
-package com.sun.identity.authentication.modules.hotp.ext;
+package com.sun.identity.authentication.modules.hotp;
 
 import com.iplanet.sso.SSOException;
 import com.sun.identity.authentication.spi.AuthLoginException;
@@ -45,7 +45,7 @@ import java.util.*;
 /**
  * Provides the functionality to send OTP codes to a users Telephone and email.
  */
-public class HOTPService {
+public class HOTPServiceExt {
 
     private static final Debug DEBUG = Debug.getInstance(HOTPExt.amAuthHOTPExt);
 
@@ -77,7 +77,7 @@ public class HOTPService {
      * @param userName       The user's name.
      * @param hotpParams     The authentication modules configuration settings.
      */
-    public HOTPService(AMIdentityRepository amIdentityRepo, String userName, HOTPParams hotpParams) {
+    public HOTPServiceExt(AMIdentityRepository amIdentityRepo, String userName, HOTPParams hotpParams) {
         this.amIdentityRepo = amIdentityRepo;
         this.userName = userName;
         this.gatewaySMSImplClass = hotpParams.getGatewaySMSImplClass();
@@ -356,12 +356,12 @@ public class HOTPService {
                 DEBUG.message("HOTP.sendSMS() : " + "IdRepoException : phone number found " + phone
                         + " with username : " + userName);
                     /*
-                     * Log a message if the carrier is unknown.  The SMSGateway module is designed to use AT&T's SMS gateway
-                     * as default.  Not sure why the product uses a default in this situation instead of simply not attempting 
-                     * to send a text message but we don't want to break any existing installations so just log it for debug
-                     * purposes.
-                     * 
-                     */
+                     * Log a message if the carrier is unknown.  The SMSGateway module is designed to use AT&T's SMS gateway
+                     * as default.  Not sure why the product uses a default in this situation instead of simply not attempting
+                     * to send a text message but we don't want to break any existing installations so just log it for debug
+                     * purposes.
+                     *
+                     */
                 if (!phone.contains("@")) {
                     DEBUG.message("HOTP.sendSMS() : No carrier detected - SMSGateway module will use default of "
                             + "@txt.att.net ");

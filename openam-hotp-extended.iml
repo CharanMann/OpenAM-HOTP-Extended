@@ -10,6 +10,9 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="Maven: org.forgerock.openam:openam-auth-hotp:13.0.0" level="project" />
+    <orderEntry type="library" name="Maven: javax.mail:mail:1.4.5" level="project" />
+    <orderEntry type="library" name="Maven: javax.activation:activation:1.1" level="project" />
     <orderEntry type="library" name="Maven: org.forgerock.openam:openam-core:13.0.0" level="project" />
     <orderEntry type="library" name="Maven: org.forgerock.openam:openam-license-servlet:13.0.0" level="project" />
     <orderEntry type="library" name="Maven: org.forgerock.openam:openam-license-core:13.0.0" level="project" />
@@ -101,8 +104,6 @@
     <orderEntry type="library" name="Maven: org.json:json:20090211" level="project" />
     <orderEntry type="library" name="Maven: javax.servlet:jstl:1.1.2" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:log4j-over-slf4j:1.7.5" level="project" />
-    <orderEntry type="library" name="Maven: javax.mail:mail:1.4.5" level="project" />
-    <orderEntry type="library" name="Maven: javax.activation:activation:1.1" level="project" />
     <orderEntry type="library" name="Maven: xalan:xalan:2.7.1" level="project" />
     <orderEntry type="library" name="Maven: xalan:serializer:2.7.1" level="project" />
     <orderEntry type="library" name="Maven: xerces-J:xercesImpl:2.11.0" level="project" />

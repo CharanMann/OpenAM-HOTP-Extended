@@ -28,14 +28,13 @@
  * OpenAM-HOTP-Extended: Created by Charan Mann on 03/29/17 , 2:45 PM.
  */
 
-package com.sun.identity.authentication.modules.hotp.ext;
+package com.sun.identity.authentication.modules.hotp;
 
 import com.iplanet.dpro.session.service.InternalSession;
 import com.iplanet.sso.SSOException;
 import com.iplanet.sso.SSOToken;
 import com.iplanet.sso.SSOTokenManager;
 import com.sun.identity.authentication.service.AMAuthErrorCode;
-import com.sun.identity.authentication.spi.AMLoginModule;
 import com.sun.identity.authentication.spi.AuthErrorCodeException;
 import com.sun.identity.authentication.spi.AuthLoginException;
 import com.sun.identity.authentication.spi.InvalidPasswordException;
@@ -48,13 +47,15 @@ import javax.security.auth.Subject;
 import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.ConfirmationCallback;
 import javax.security.auth.callback.PasswordCallback;
-import java.security.Principal;
 import java.util.Collections;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
 
-public class HOTPExt extends AMLoginModule {
+/**
+ * Extension of {@link HOTP} authentication module
+ */
+public class HOTPExt extends HOTP {
 
     protected static final String amAuthHOTPExt = "amAuthHOTPExt";
     protected static final Debug debug = Debug.getInstance(amAuthHOTPExt);
@@ -71,7 +72,6 @@ public class HOTPExt extends AMLoginModule {
     private static final String AUTO_CLICKING = "sunAMAuthHOTPAutoClicking";
     private static final String SKIP_HOTP = "skipHOTP";
     public Map currentConfig;
-    protected Principal userPrincipal;
     ResourceBundle bundle = null;
     private String userName = null;
     private String userUUID = null;
@@ -90,10 +90,11 @@ public class HOTPExt extends AMLoginModule {
 
     private int START_STATE = 2;
 
-    private HOTPService hotpService;
+    private HOTPServiceExt hotpServiceExt;
 
     private Set<String> userSearchAttributes = Collections.emptySet();
 
+    @Override
     public void init(Subject subject, Map sharedState, Map options) {
         currentConfig = options;
         String authLevel = CollectionHelper.getMapAttr(options, AUTHLEVEL);
@@ -168,9 +169,10 @@ public class HOTPExt extends AMLoginModule {
                 telephoneAttribute, carrierAttribute, emailAttribute, codeDelivery, currentConfig,
                 Integer.parseInt(codeLength), bundle.getString("messageSubject"), bundle.getString("messageContent"),
                 FROM_ADDRESS, userSearchAttributes);
-        hotpService = new HOTPService(getAMIdentityRepository(getRequestOrg()), userName, hotpParams);
+        hotpServiceExt = new HOTPServiceExt(getAMIdentityRepository(getRequestOrg()), userName, hotpParams);
     }
 
+    @Override
     public int process(Callback[] callbacks, int state) throws AuthLoginException {
         if (skip) {
             debug.message("Skipping HOTP module");
@@ -184,9 +186,9 @@ public class HOTPExt extends AMLoginModule {
             if (hotpAutoClicking) {
                 debug.message("Auto sending OTP code");
                 try {
-                    AMIdentity amIdentity = hotpService.getAMIdentity();
-                    hotpService.sendHOTP(amIdentity);
-                    substituteHeader(START_STATE, bundle.getString("send.success") + hotpService.getContactDetails(amIdentity));
+                    AMIdentity amIdentity = hotpServiceExt.getAMIdentity();
+                    hotpServiceExt.sendHOTP(amIdentity);
+                    substituteHeader(START_STATE, bundle.getString("send.success") + hotpServiceExt.getContactDetails(amIdentity));
                 } catch (AuthLoginException ale) {
                     throw new AuthErrorCodeException(AMAuthErrorCode.AUTH_ERROR, amAuthHOTPExt, "send.failure");
                 }
@@ -221,7 +223,7 @@ public class HOTPExt extends AMLoginModule {
                         }
 
                         // Enforce the code validate time HOTP module config
-                        if (hotpService.isValidHOTP(enteredHOTPCode)) {
+                        if (hotpServiceExt.isValidHOTP(enteredHOTPCode)) {
                             return ISAuthConstants.LOGIN_SUCCEED;
                         } else {
                             setFailureID(userName);
@@ -229,9 +231,9 @@ public class HOTPExt extends AMLoginModule {
                         }
                     } else { // Send HOTP Code
                         try {
-                            AMIdentity amIdentity = hotpService.getAMIdentity();
-                            hotpService.sendHOTP(amIdentity);
-                            substituteHeader(START_STATE, bundle.getString("send.success") + hotpService.getContactDetails(amIdentity));
+                            AMIdentity amIdentity = hotpServiceExt.getAMIdentity();
+                            hotpServiceExt.sendHOTP(amIdentity);
+                            substituteHeader(START_STATE, bundle.getString("send.success") + hotpServiceExt.getContactDetails(amIdentity));
                         } catch (AuthLoginException ale) {
                             throw new AuthErrorCodeException(AMAuthErrorCode.AUTH_ERROR, amAuthHOTPExt, "send.failure");
                         }
@@ -255,29 +257,4 @@ public class HOTPExt extends AMLoginModule {
         }
     }
 
-    public Principal getPrincipal() {
-        if (userUUID != null) {
-            userPrincipal = new HOTPPrincipal(userUUID);
-            return userPrincipal;
-        } else if (userName != null) {
-            userPrincipal = new HOTPPrincipal(userName);
-            return userPrincipal;
-        } else {
-            return null;
-        }
-    }
-
-    // cleanup state fields
-    public void destroyModuleState() {
-        nullifyUsedVars();
-    }
-
-    public void nullifyUsedVars() {
-        bundle = null;
-        userName = null;
-        sharedState = null;
-        currentConfig = null;
-        enteredHOTPCode = null;
-        userSearchAttributes = Collections.emptySet();
-    }
 }
