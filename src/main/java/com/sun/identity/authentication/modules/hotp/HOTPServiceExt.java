@@ -285,6 +285,7 @@ public class HOTPServiceExt {
 
     /**
      * Get user contact details to be set as Header
+     *
      * @param amIdentity
      * @return
      */
@@ -305,7 +306,7 @@ public class HOTPServiceExt {
             contactDetails = " Phone: " + phone;
         } else if (codeDelivery.equals("E-mail")) {
             contactDetails = " Email: " + email;
-        } else{
+        } else {
             contactDetails = "No user info found";
         }
 
