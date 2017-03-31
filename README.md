@@ -12,6 +12,15 @@ OpenAM Configuration:
 =====================
 1. Build the custom auth module by using maven. 
 2. Deploy the custom auth module. Refer instructions: *[Building and Installing Custom Authentication Modules](https://backstage.forgerock.com/docs/openam/13.5/dev-guide#build-config-sample-auth-module)*
+```
+Register service and module: Note that for OpenAM v12 use amAuthHOTPExt-12.xml
+forgerock@openam1-12:~/openam1/tools/openam/bin$ ./ssoadm create-svc --adminid amadmin --password-file /tmp/pwd.txt --xmlfile ~/softwares/amAuthHOTPExt.xml
+forgerock@openam1-12:~/openam1/tools/openam/bin$ ./ssoadm register-auth-module --adminid amadmin --password-file /tmp/pwd.txt --authmodule com.sun.identity.authentication.modules.hotp.HOTPExt
+
+UnRegister service and module (in case module needs to be uninstalled) : 
+./ssoadm unregister-auth-module --adminid amadmin --password-file /tmp/pwd.txt --authmodule com.sun.identity.authentication.modules.hotp.HOTPExt
+./ssoadm delete-svc --adminid amadmin --password-file /tmp/pwd.txt -s sunAMAuthHOTPExtService
+```
 3. Configure the custom auth module. Refer instructions: *[Configuring and Testing Custom Authentication Modules](https://backstage.forgerock.com/docs/openam/13.5/dev-guide#configuring-testing-sample-auth-module)*
 4. Configure HOTPExt module with required SMTP server. Enable both SMS and EMail.
 5. Create a chain(otpChain) with (LDAP:Required, HOTPExt:Required). Set this chain as default for "Organization Authentication"
