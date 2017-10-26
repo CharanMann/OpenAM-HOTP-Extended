@@ -351,13 +351,6 @@
                 </SubSchema>
             </Organization>
         </Schema>
-        <Configuration>
-            <OrganizationConfiguration name="/">
-                <AttributeValuePair>
-                    <Attribute name="sunAMAuthHOTPAuthLevel"/>
-                    <Value>0</Value>
-                </AttributeValuePair>
-            </OrganizationConfiguration>
-        </Configuration>
+        </Schema>
     </Service>
 </ServicesConfiguration>
